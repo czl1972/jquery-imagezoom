@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Image Zoom Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	
+	<style type="text/css">
+		img {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<h1>jQuery.imageZoom Demo</h1>
+	<div style="float: left; width: 200px; height: 200px; background: #f00; margin: 10px;">
+	   This is a dummy container to show that the plugin works with floated elements
+	   
+	</div>
+	<img src="http://placekitten.com/800/800" style="width: 200px; height: 200px; margin: 10px; float: left;"/>
+	<img src="http://placekitten.com/800/600" style="width: 300px; height: 240px; clear: both;"/>
+	
+	<div class="zoomable" style="width: 220px; border: 2px dotted black; padding: 10px;">
+		<h3>This is zoomable content</h3>
+		<p style="width: 200px; background: #0f0;" >Pellentesque vitae magna id nulla laoreet consectetur. 
+		    Aenean molestie vulputate tortor. Pellentesque habitant morbi tristique senectus et netus et 
+		    malesuada fames ac turpis egestas. Nulla leo tortor, venenatis eget pretium vel, volutpat nec diam.</p>
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/hammer.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/jquery.hammer.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/brandonaaron/jquery-mousewheel/master/jquery.mousewheel.js"></script>
+	<script type="text/javascript" src="../jquery.imagezoom.min.js"></script>
+	<script type="text/javascript">
+	;(function($) {
+		$(function(){
+		    var isMobile = navigator.userAgent.match(/Mobile/i) == true;
+			$("img").imageZoom({ disableHammer: !isMobile });
+			$(".zoomable").imageZoom();
+		});
+	})(jQuery);
+	</script>
+</body>
+</html>
