@@ -32,7 +32,7 @@ Include `jquery.imagezoom.js` in your code. Example:
 Demo
 ------------
 
-Here's a [demo](demo/index.html) showing zoom on images as well as a regular DOM element.
+Here's a [demo](jquery-imagezoom/demo/index.html) showing zoom on images as well as a regular DOM element.
 
 
 Usage
