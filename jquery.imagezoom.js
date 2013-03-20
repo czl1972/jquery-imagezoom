@@ -61,28 +61,34 @@
 					wrapper.hammer($settings.hammerSettings);
 					
 					wrapper.bind("transformstart", function(event){
-						// We save the initial midpoint of the first two touches to
-						// say where our transform origin is.
-						var x1 = event.touches[0].x || 0;
-						var x2 = event.touches[1].x || 0;
-						var y1 = event.touches[0].y || 0;
-						var y2 = event.touches[1].y || 0;
+						if(event && event.gesture){
+							// We save the initial midpoint of the first two touches to
+							// say where our transform origin is.
+							var x1 = event.gesture.touches[0].screenX || 0;
+							var x2 = event.gesture.touches[1].screenX || 0;
+							var y1 = event.gesture.touches[0].screenY || 0;
+							var y2 = event.gesture.touches[1].screenY || 0;
 						
-						var pX = ((x1 + x2) * 0.5 - offset.left) / scale;
-						var pY = ((y1 + y2) * 0.5 - offset.top) / scale;
+							var pX = ((x1 + x2) * 0.5 - offset.left) / scale;
+							var pY = ((y1 + y2) * 0.5 - offset.top) / scale;
 						
-						var pos = $this.position();
-						pX -= pos.left / scale;
-						pY -= pos.top / scale;
+							var pos = $this.position();
 						
-						origin.x = pX;
-						origin.y = pY;
+							pX -= pos.left / scale;
+							pY -= pos.top / scale;
+						
+							origin.x = pX;
+							origin.y = pY;
+						}
 					});
 					
 					wrapper.bind("transform", function(event) {
-						scale = Math.max($settings.minZoom, Math.min(prevScale * event.scale, $settings.maxZoom));
+						if(event && event.gesture){
+							scale = Math.max($settings.minZoom, Math.min(
+								prevScale * event.gesture.scale, $settings.maxZoom));
 						
-						transform();
+							transform();
+						}
 					});
 					
 					wrapper.bind("transformend", function(event) {
@@ -90,16 +96,18 @@
 					});
 					
 					wrapper.bind("drag", function(event) {
-						if(lastEvent){
-							origin.x += (lastEvent.position.x - event.position.x) / scale;
-							origin.y += (lastEvent.position.y - event.position.y) / scale;
-							transform();
-						}
+						if(event && event.gesture){
+							if(lastEvent){
+								origin.x += (lastEvent.gesture.deltaX - event.gesture.deltaX) / scale;
+								origin.y += (lastEvent.gesture.deltaY - event.gesture.deltaY) / scale;
+								transform();
+							}
 						
-						lastEvent = event;
-						if(scale > 1){
-							event.preventDefault();
-							event.stopPropagation();
+							lastEvent = event;
+							if(scale > 1){
+								event.gesture.srcEvent.preventDefault();
+								event.gesture.srcEvent.stopPropagation();
+							}
 						}
 					});
 					
@@ -109,6 +117,7 @@
 				}
 				
 				var bindDesktop = function(){
+					window.console.log("bind desktop");
 					wrapper.mousewheel(function(event, delta, deltaX, deltaY){
 						var pX = (event.clientX - offset.left) / scale;
 						var pY = (event.clientY - offset.top) / scale;
@@ -133,7 +142,7 @@
 					});
 					
 					// build drag functionality for desktop if hammer isn't available
-					if((typeof jQuery.fn.hammer != "function") || $settings.disableHammer){
+					if((typeof jQuery.fn.hammer != "function") || $settings.disableHammer){
 						var onDrag = function(event){
 							if(lastEvent){
 								origin.x += (lastEvent.clientX - event.clientX) / scale;
@@ -163,7 +172,7 @@
 							lastEvent = null;
 						});
 					}
-				}
+				};
 				
 				// get the actual offset of the element to transform
 				$("." + $settings.wrapperClass + " " + $this[0].tagName).each(function(){
@@ -184,9 +193,9 @@
 						props[vendor +"transform-origin"] = origin.x + "px " + origin.y + "px";
 					});
 					$this.css(props);
-				}
+				};
 				
-				if((typeof jQuery.fn.hammer == "function") && !$settings.disableHammer){
+				if((typeof jQuery.fn.hammer == "function") && !$settings.disableHammer){
 					bindMobile();
 				}
 				if((typeof jQuery.fn.mousewheel == "function")){
@@ -199,9 +208,9 @@
 			return this.each(function() {
 				var $this = $(this);
 				if($this.data("hasImageZoom")){
-					var settings = $this.data(settings) || $.fn.imageZoom.defaults;
+					var settings = $this.data(settings) || $.fn.imageZoom.defaults;
 					
-					$this.attr("style", $this.data("originalStyles") || "");
+					$this.attr("style", $this.data("originalStyles") || "");
 					$this.unwrap("." + settings.wrapperClass);
 					
 					$this.data("hasImageZoom", false);
@@ -213,7 +222,7 @@
 	$.fn.imageZoom = function(method) {
 		if ( methods[method] ) {
 			return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
-		} else if ( typeof method === 'object' || ! method ) {
+		} else if ( typeof method === 'object' || !method ) {
 			return methods.init.apply( this, arguments );
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.imageZoom' );
