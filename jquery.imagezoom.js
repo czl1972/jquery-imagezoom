@@ -117,7 +117,6 @@
 				}
 				
 				var bindDesktop = function(){
-					window.console.log("bind desktop");
 					wrapper.mousewheel(function(event, delta, deltaX, deltaY){
 						var pX = (event.clientX - offset.left) / scale;
 						var pY = (event.clientY - offset.top) / scale;
