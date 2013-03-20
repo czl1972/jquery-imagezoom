@@ -28,16 +28,16 @@
 	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/hammer.js"></script>
-	<script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/jquery.hammer.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/dist/hammer.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/EightMedia/hammer.js/master/dist/jquery.hammer.js"></script>
 	<script type="text/javascript" src="https://raw.github.com/brandonaaron/jquery-mousewheel/master/jquery.mousewheel.js"></script>
 	<script type="text/javascript" src="../jquery.imagezoom.min.js"></script>
 	<script type="text/javascript">
 	;(function($) {
 		$(function(){
-		    var isMobile = navigator.userAgent.match(/Mobile/i) == true;
+		    var isMobile = navigator.userAgent.match(/Mobile/i) != null;
 			$("img").imageZoom({ disableHammer: !isMobile });
-			$(".zoomable").imageZoom();
+			$(".zoomable").imageZoom({ disableHammer: !isMobile });
 		});
 	})(jQuery);
 	</script>
